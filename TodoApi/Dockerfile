@@ -1,22 +1,22 @@
-# שלב 1: בניית האפליקציה
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# שלב 1: שימוש ב-SDK של .NET 9 לבניית הפרויקט
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
 # העתקת קובץ הפרויקט והורדת ספריות
 COPY ["TodoApi.csproj", "."]
 RUN dotnet restore "TodoApi.csproj"
 
-# העתקת שאר הקבצים ובנייה בגרסת Release
+# העתקת שאר הקבצים ובניית הפרויקט
 COPY . .
 RUN dotnet publish "TodoApi.csproj" -c Release -o /app/publish
 
-# שלב 2: יצירת התמונה הסופית להרצה
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+# שלב 2: יצירת תמונה קלה להרצה (Runtime)
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 
-# הגדרת הפורט ש-Render דורש
-ENV ASPNETCORE_URLS=http://+:8080
-EXPOSE 8080
+# הגדרת פורט עבור Render
+ENV ASPNETCORE_URLS=http://+:80
+EXPOSE 80
 
 ENTRYPOINT ["dotnet", "TodoApi.dll"]
