@@ -1,4 +1,4 @@
-# 📝 TaskFlow Manager
+# 📝 ToDoList Manager
 A robust Full-Stack application for managing daily tasks and productivity.
 
 ## 🚀 Features
